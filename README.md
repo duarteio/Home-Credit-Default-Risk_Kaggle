@@ -1,4 +1,10 @@
-# Home-Credit-Default-Risk_Kaggle
+# Home Credit Default Risk
+A Kaggle competition
+
+This project was created to participate in a Kaggle prediction competition. Go to https://www.kaggle.com/c/home-credit-default-risk/overview for more information on the background of the competition and the data.
+
+To be able to access the data, you will need to log into Kaggle website, to go to https://www.kaggle.com/c/home-credit-default-risk/rules and to click on the "I Understand and Accept" button to gain access.
+
 
 # Setting environment
 Clone this repository and follow the steps to configure environment.
@@ -23,5 +29,4 @@ python setup.py
 ```
 This will do the following:
 1. Create project folders
-2. Download data into the data/ folder via kaggle API
-3. 
+2. Download and uncompress the data into the data/raw/ folder via kaggle API
