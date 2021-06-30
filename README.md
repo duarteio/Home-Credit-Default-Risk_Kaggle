@@ -5,6 +5,11 @@ This project was created to participate in a Kaggle prediction competition. Go t
 
 To be able to access the data, you will need to log into Kaggle website, to go to https://www.kaggle.com/c/home-credit-default-risk/rules and to click on the "I Understand and Accept" button to gain access.
 
+# Requirements
+The execution of all programs require the following programs:
+1. python3 (required modules are listed in requirements.txt)
+2. SQLite
+
 
 # Setting environment
 Clone this repository and follow the steps to configure environment.
@@ -30,3 +35,4 @@ python setup.py
 This will do the following:
 1. Create project folders
 2. Download and uncompress the data into the data/raw/ folder via kaggle API
+3. Create SQLite database tables
