@@ -4,7 +4,10 @@ import subprocess
 import os
 from zipfile import ZipFile
 from pathlib import Path
+from datetime import datetime
 
+def get_datetime():
+    return str(datetime.now())[0:16]
 
 def create_folders():
     folders = ['data/','data/raw/','db/']
@@ -12,7 +15,6 @@ def create_folders():
         if not os.path.exists(folder):
             os.makedirs(folder)
     return
-
 
 def download_data():
     kaggleCommand = "kaggle competitions download -c home-credit-default-risk -p data/raw -q"
@@ -22,36 +24,43 @@ def download_data():
     if 'home-credit' not in zipfile:
         print("Download failed. Please check if kaggle.json is placed correctly at .kaggle\ and make sure that you have accepted the rules on https://www.kaggle.com/c/home-credit-default-risk/rules")
         quit()
-    ZipFile('data/raw/'+zipfile).extractall(path='data/raw/')
+    files = ZipFile('data/raw/'+zipfile).namelist()[1:-1]
+    ZipFile('data/raw/'+zipfile).extractall(path='data/raw/',members=files)
     os.remove("data/raw/"+zipfile)
     return
 
-
-def connect_db():
+def create_db():
     Path('db/home_credit.db').touch()
-    return sqlite3.connect('db/home_credit.db')
 
+def connect_db(path_db):
+    return sqlite3.connect(path_db)
 
-def create_tables(conn,csv_files):
+def create_tables(conn, csv_files):
     for file in csv_files:
+        print(f'# {get_datetime()} - Insert {file} to db')
         pd.read_csv("data//raw//" + file).to_sql(file.split(".")[0], conn, if_exists='replace', index=False)
     return
 
-
 def main():
-    print("Creating accessory folders")
-    create_folders()
-    print("Downloading data... It may take a while...")
-    download_data()
-    print("The data were successfully downloaded!")
-    print("")
+    print(f'\n##### {get_datetime()} - START - Setup.py ##### \n')
 
-    print("Creating database")
-    conn = connect_db()
-    c = conn.cursor()
+    print(f"# {get_datetime()} - Creating accessory folders\n")
+    create_folders()
+    
+    print(f"# {get_datetime()} - Downloading data... It may take a while...\n")
+    download_data()
+    
+    print(f"# {get_datetime()} - Creating database\n")
+    create_db()
+
+    print(f"# {get_datetime()} - Connecting db\n")
+    conn = connect_db('db/home_credit.db')
+
+    print(f"# {get_datetime()} - Insert data to db\n")
     csv_files = os.listdir("data/raw/")
     create_tables(conn,csv_files)
 
+    print(f'\n##### {get_datetime()} END - Setup.py ##### \n')
 
 if __name__=="__main__":
     main()
